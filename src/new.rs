@@ -13,7 +13,7 @@ pub async fn run(new: New) -> anyhow::Result<()> {
     let New { title, .. } = new;
     let theme = ColorfulTheme::default();
     let title: String = title
-        .ok_or_else(|| anyhow::anyhow!("title is required"))
+        .ok_or_else(|| anyhow::anyhow!("article title is required"))
         .or_else::<anyhow::Error, _>(|_| {
             Ok(Input::<String>::with_theme(&theme)
                 .with_prompt("article title")
