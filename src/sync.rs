@@ -286,8 +286,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn status_displays() {
-        assert_eq!(format!("{}", Status::Posting), "\u{1b}[33mPOSTING\u{1b}[0m");
+    fn status_impl_display() {
+        fn test(_: impl fmt::Display) {}
+        test(Status::Posting)
     }
 
     #[test]
