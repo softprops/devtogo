@@ -1,12 +1,12 @@
 use chrono::DateTime;
 use colored::Colorize;
+use frontmatter::Yaml;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{fmt, fs, path::PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
-use yaml_rust::Yaml;
 
 enum Status<'a> {
     Uploaded,
@@ -80,12 +80,6 @@ fn extract(
                 "file {} is missing required markdown frontmatter.\n  ▶ Please see https://dev.to/p/editor_guide more information on what frontmatter is expected", name
             )
         }
-    )?
-    .into_hash()
-    .ok_or_else(
-        || anyhow::anyhow!(
-            "file {} contains frontmatter that not well formatted", name
-        )
     )?;
 
     Ok((Frontmatter::from_file(&name, metadata)?, back.into()))
@@ -107,16 +101,17 @@ impl Frontmatter {
     /// extract and validate raw yaml frontmatter
     fn from_file(
         name: &str,
-        metadata: yaml_rust::yaml::Hash,
+        metadata: Yaml,
     ) -> anyhow::Result<Frontmatter> {
+        let hash = metadata.into_hash().ok_or_else(|| {
+            anyhow::anyhow!("file {} contains frontmatter that not well formatted", name)
+        })?;
         let string = |name: &str| -> Option<String> {
-            metadata
-                .get(&Yaml::String(name.into()))
+            hash.get(&Yaml::String(name.into()))
                 .and_then(|v| v.as_str().map(|s| s.into()))
         };
         let boolean = |name: &str| -> Option<bool> {
-            metadata
-                .get(&Yaml::String(name.into()))
+            hash.get(&Yaml::String(name.into()))
                 .and_then(|v| v.as_bool())
         };
         let title = string("title").ok_or_else(|| {
