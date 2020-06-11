@@ -29,3 +29,14 @@
 </div>
 
 <br />
+
+## install
+
+...
+
+## usage
+
+devtogo is a cli primarily for the use of writing markdown articles offline and then
+uploading them to dev.to
+
+Doug Tangren (softprops) 2020

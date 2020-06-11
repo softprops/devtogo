@@ -1,4 +1,3 @@
-use crate::error::StrErr;
 use dialoguer::{theme::ColorfulTheme, Input};
 use structopt::StructOpt;
 
@@ -14,7 +13,7 @@ pub async fn run(new: New) -> anyhow::Result<()> {
     let New { title, .. } = new;
     let theme = ColorfulTheme::default();
     let title: String = title
-        .ok_or_else(|| StrErr("title is required".into()))
+        .ok_or_else(|| anyhow::anyhow!("title is required"))
         .or_else::<anyhow::Error, _>(|_| {
             Ok(Input::<String>::with_theme(&theme)
                 .with_prompt("article title")

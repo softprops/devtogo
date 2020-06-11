@@ -1,4 +1,3 @@
-use crate::error::StrErr;
 use chrono::DateTime;
 use colored::Colorize;
 use reqwest::Client;
@@ -77,19 +76,15 @@ fn extract(
     let (front, back) = frontmatter::parse_and_find_content(&content)?;
     let metadata = front.ok_or_else(
         || {
-            StrErr(
-                format!(
-                    "file {} is missing required markdown frontmatter.\n  ▶ Please see https://dev.to/p/editor_guide more information on what frontmatter is expected", name
-                )
+            anyhow::anyhow!(
+                "file {} is missing required markdown frontmatter.\n  ▶ Please see https://dev.to/p/editor_guide more information on what frontmatter is expected", name
             )
         }
     )?
     .into_hash()
     .ok_or_else(
-        || StrErr(
-            format!(
-                "file {} contains frontmatter that not well formatted", name
-            )
+        || anyhow::anyhow!(
+            "file {} contains frontmatter that not well formatted", name
         )
     )?;
 
@@ -125,20 +120,18 @@ impl Frontmatter {
                 .and_then(|v| v.as_bool())
         };
         let title = string("title").ok_or_else(|| {
-            StrErr(format!(
-                "file {} contains frontmatter missing a string title",
-                name
-            ))
+            anyhow::anyhow!("file {} contains frontmatter missing a string title", name)
         })?;
         let published = boolean("published");
         let tags = string("tags");
         let date = string("date");
         if let Some(value) = &date {
             if DateTime::parse_from_rfc3339(&value).is_err() {
-                Err(StrErr(format!(
+                anyhow::bail!(
                     "file {} contains frontmatter with and invalid date: {}",
-                    name, value
-                )))?
+                    name,
+                    value
+                );
             }
         }
         let series = string("series");
@@ -220,11 +213,11 @@ async fn put(
 
 async fn fetch(
     client: &Client,
-    api_key: &String,
+    api_key: &str,
 ) -> anyhow::Result<Vec<Article>> {
     Ok(client
         .get("https://dev.to/api/articles/me/all?per_page=1000")
-        .header("api-key", api_key.as_str())
+        .header("api-key", api_key)
         .send()
         .await?
         .json()
@@ -339,7 +332,7 @@ mod tests {
     }
 
     #[test]
-    fn test_extract_validates_date()  {
+    fn test_extract_validates_date() {
         let result = extract(
             "foo.md",
             r#"---

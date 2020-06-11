@@ -1,10 +1,8 @@
 mod new;
 mod sync;
-mod error;
 
-use crate::error::StrErr;
 use new::New;
-use std::{env};
+use std::env;
 use structopt::StructOpt;
 use sync::Sync;
 
@@ -23,7 +21,7 @@ async fn main() -> anyhow::Result<()> {
         Opts::Sync(args) => {
             sync::run(
                 env::var("DEVTO_API_KEY")
-                    .map_err(|_| StrErr("Please provide a DEVTO_API_KEY env variable".into()))?,
+                    .map_err(|_| anyhow::anyhow!("Please provide a DEVTO_API_KEY env variable"))?,
                 args,
             )
             .await?
