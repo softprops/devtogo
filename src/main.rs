@@ -1,8 +1,8 @@
 mod push;
 
+use push::Push;
 use std::env;
 use structopt::StructOpt;
-use push::Push;
 
 /// A dev.to tool for the road 👩🏽‍💻🎒
 ///
@@ -13,7 +13,7 @@ use push::Push;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let args = Push::from_args();
-            push::run(
+    push::run(
                 env::var("DEVTO_API_KEY")
                     .map_err(|_| anyhow::anyhow!(
                         "Please export a DEVTO_API_KEY env variable..\n  ▶ You can generate one by visiting https://dev.to/settings/account"
