@@ -1,34 +1,25 @@
-mod new;
-mod sync;
+mod push;
 
-use new::New;
 use std::env;
 use structopt::StructOpt;
-use sync::Sync;
+use push::Push;
 
 /// A dev.to tool for the road 👩🏽‍💻🎒
 ///
 /// Synchronizes local markdown files with dev.to articles and generates local templates.
-#[derive(StructOpt)]
-enum Opts {
-    Sync(Sync),
-    New(New),
-}
+//#[derive(StructOpt)]
+//struct Opts(Push);
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    match Opts::from_args() {
-        Opts::Sync(args) => {
-            sync::run(
+    let args = Push::from_args();
+            push::run(
                 env::var("DEVTO_API_KEY")
                     .map_err(|_| anyhow::anyhow!(
                         "Please export a DEVTO_API_KEY env variable..\n  ▶ You can generate one by visiting https://dev.to/settings/account"
                     ))?,
                 args,
             )
-            .await?
-        }
-        Opts::New(args) => new::run(args).await?,
-    }
+            .await?;
     Ok(())
 }

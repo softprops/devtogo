@@ -58,9 +58,11 @@ struct Article {
     body_markdown: String,
 }
 
-/// 🔼 Uploads local markdown files with dev.to
+/// A dev.to tool for the road 👩🏽‍💻🎒
+///
+/// Uploads local markdown files with dev.to
 #[derive(StructOpt, Debug)]
-pub struct Sync {
+pub struct Push {
     /// Directory to source markdown files from. Defaults to current working directory
     #[structopt(short, long)]
     source: Option<PathBuf>,
@@ -221,9 +223,9 @@ async fn fetch(
 
 pub async fn run(
     api_key: String,
-    args: Sync,
+    args: Push,
 ) -> anyhow::Result<()> {
-    let Sync { source, dryrun } = args;
+    let Push { source, dryrun } = args;
     let client = Client::new();
     let articles = fetch(&client, &api_key).await?;
     let mut hasher = Sha256::new();
