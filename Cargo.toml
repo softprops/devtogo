@@ -6,6 +6,9 @@ edition = "2018"
 description = "a dev.to tool for the road"
 readme = "README.md"
 license = "MIT"
+documentation = "https://docs.rs/devtogo"
+homepage = "https://github.com/softprops/devtogo"
+repository = "https://github.com/softprops/devtogo"
 categories = ["command-line-utilities"]
 keywords = ["dev.to", "dev", "blog"]
 
