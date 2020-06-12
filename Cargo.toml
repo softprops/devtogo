@@ -24,7 +24,6 @@ again = "0.1"
 anyhow = "1.0"
 chrono = "0.4"
 colored = "1.9"
-dialoguer = "0.6"
 frontmatter = "0.4"
 reqwest = { version = "0.10", default_features= false, features = ["rustls-tls", "json"] }
 serde = { version = "1.0", features = ["derive"] }
