@@ -3,8 +3,21 @@ name = "devtogo"
 version = "0.1.0"
 authors = ["softprops <d.tangren@gmail.com>"]
 edition = "2018"
+description = "a dev.to tool for the road"
+readme = "README.md"
+license = "MIT"
+categories = ["command-line-utilities"]
+keywords = ["dev.to", "dev", "blog"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.release]
+# https://doc.rust-lang.org/cargo/reference/profiles.html#lto
+lto = true
+# https://doc.rust-lang.org/cargo/reference/profiles.html#codegen-units
+codegen-units = 1
+# https://doc.rust-lang.org/cargo/reference/profiles.html#panic
+panic = "abort"
 
 [dependencies]
 again = "0.1"
