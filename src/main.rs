@@ -2,13 +2,6 @@ mod push;
 
 use push::Push;
 use std::env;
-use structopt::StructOpt;
-
-/// A dev.to tool for the road 👩🏽‍💻🎒
-///
-/// Synchronizes local markdown files with dev.to articles and generates local templates.
-//#[derive(StructOpt)]
-//struct Opts(Push);
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
