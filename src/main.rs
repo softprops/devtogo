@@ -9,7 +9,7 @@ async fn main() -> anyhow::Result<()> {
     push::run(
         env::var("DEVTO_API_KEY")
             .map_err(|_| anyhow::anyhow!(
-                "Please export a DEVTO_API_KEY env variable..\n  ▶ You can generate one by visiting https://dev.to/settings/account"
+                "Please export a DEVTO_API_KEY env variable.\n  ▶ You can generate one by visiting https://dev.to/settings/account"
             ))?,
         args,
     )
