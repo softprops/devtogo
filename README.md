@@ -11,13 +11,13 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/softprops/devtogo/actions">
+  <a alt="GitHub Actions" href="https://github.com/softprops/devtogo/actions">
     <img src="https://github.com/softprops/devtogo/workflows/Main/badge.svg"/>
   </a>
-  <a href="https://crates.io/crates/devtogo">
-    <img src="http://meritbadge.herokuapp.com/devtogo"/>
+  <a alt="crates.io" href="https://crates.io/crates/devtogo">
+    <img src="https://img.shields.io/crates/v/devtogo.svg?logo=rust"/>
   </a>
-  <a href="LICENSE">
+  <a alt="license" href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg"/>
   </a>
 </div>
