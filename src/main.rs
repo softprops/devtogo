@@ -2,6 +2,7 @@ mod push;
 
 use push::Push;
 use std::env;
+use structopt::StructOpt;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
