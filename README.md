@@ -47,10 +47,6 @@ $ curl -L "https://github.com/softprops/devtogo/releases/download/v0.0.1/devtogo
   | tar -xz -C ~/bin
 ```
 
-### Via Homebrew
-
-
-
 ## usage
 
 devtogo is a cli primarily focused on publishing offline markdown files to [dev.to](https://dev.to/).
