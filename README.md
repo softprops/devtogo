@@ -26,7 +26,30 @@
 
 ## install
 
-...
+
+### Via homebrew (osx)
+
+```sh
+$ brew install softprops/tools/devtogo
+```
+
+### Via cargo
+
+```sh
+$ cargo install devtogo
+```
+
+### Via GitHub Releases
+
+```sh
+$ cd $HOME/bin
+$ curl -L "https://github.com/softprops/devtogo/releases/download/v0.0.1/devtogo-$(uname -s)-$(uname -m).tar.gz" \
+  | tar -xz -C ~/bin
+```
+
+### Via Homebrew
+
+
 
 ## usage
 
