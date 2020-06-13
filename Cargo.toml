@@ -10,7 +10,7 @@ documentation = "https://docs.rs/devtogo"
 homepage = "https://github.com/softprops/devtogo"
 repository = "https://github.com/softprops/devtogo"
 categories = ["command-line-utilities"]
-keywords = ["dev.to", "dev", "blog"]
+keywords = ["devto", "dev", "blog"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
