@@ -221,6 +221,14 @@ async fn fetch(
         .await?)
 }
 
+fn valid_path(path: &PathBuf) -> bool {
+    !path.is_dir()
+        && path
+            .extension()
+            .into_iter()
+            .any(|e| e == "md" || e == "markdown")
+}
+
 pub async fn run(
     api_key: String,
     args: Push,
@@ -231,16 +239,13 @@ pub async fn run(
     let mut hasher = Sha256::new();
     for path in WalkDir::new(source.unwrap_or_else(|| ".".into()))
         .into_iter()
-        .filter_map(|e| e.ok().map(|e| e.path().to_owned()).filter(|p| !p.is_dir()))
+        .filter_map(|e| e.ok().map(|e| e.path().to_path_buf()))
+        .filter(valid_path)
     {
         let client = client.clone();
         let api_key = api_key.clone();
         let content = fs::read_to_string(&path)?;
-        let name = path
-            .as_path()
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy();
+        let name = path.file_name().unwrap_or_default().to_string_lossy();
         let (meta, _) = extract(name.as_ref(), &content)?;
         let status = match articles.iter().find(|a| a.title == meta.title) {
             None => Status::Posting,
@@ -281,6 +286,25 @@ pub async fn run(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn valid_path_isnt_dirs() {
+        assert!(!valid_path(&PathBuf::from("/")))
+    }
+
+    #[test]
+    fn valid_path_contains_md_ext() {
+        assert!(valid_path(&PathBuf::from("/foo.md")));
+    }
+
+    #[test]
+    fn valid_path_contains_markdown_ext() {
+        assert!(valid_path(&PathBuf::from("/foo.markdown")));
+    }
+
+    #[test]
+    fn valid_path_doesnt_contains_other_ext() {
+        assert!(!valid_path(&PathBuf::from("/foo.txt")));
+    }
 
     #[test]
     fn status_impl_display() {
