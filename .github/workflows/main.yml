@@ -52,6 +52,7 @@ jobs:
 
   release:
     needs: [test]
+    if: startsWith(github.ref, 'refs/tags/')
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
@@ -125,8 +126,9 @@ jobs:
           softprops/tools/devtogo
 
   publish-crate:
-    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     needs: [test]
+    runs-on: ubuntu-latest
     steps:
       - name: Set up Rust
         uses: hecrj/setup-rust-action@v1
