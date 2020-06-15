@@ -51,6 +51,9 @@ $ curl -L "https://github.com/softprops/devtogo/releases/download/v0.0.1/devtogo
 
 devtogo is a cli primarily focused on publishing offline markdown files to [dev.to](https://dev.to/).
 
+
+You will first need to export an `DEVTO_API_KEY` env variable. You can get one [here](https://dev.to/settings/account)
+
 The most basic usage is to run the program inside the directory containing content
 
 ```sh
@@ -70,6 +73,13 @@ is stored.
 
 ```sh
 $ devtogo --source path/to/content
+```
+
+You can also experiment without actually posting your content using the `--dryrun` flag. This will perform all operations
+except for uploading your content. This may be useful for validating your content.
+
+```sh
+$ devto --dryrun
 ```
 
 Doug Tangren (softprops) 2020
