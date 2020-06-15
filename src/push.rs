@@ -1,3 +1,4 @@
+use anyhow::{anyhow, bail};
 use chrono::DateTime;
 use colored::Colorize;
 use frontmatter::Yaml;
@@ -7,7 +8,6 @@ use sha2::{Digest, Sha256};
 use std::{fmt, fs, path::PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
-use anyhow::{anyhow, bail};
 
 enum Status<'a> {
     Uploaded,
@@ -106,9 +106,9 @@ impl Frontmatter {
         name: &str,
         metadata: Yaml,
     ) -> anyhow::Result<Frontmatter> {
-        let hash = metadata.into_hash().ok_or_else(|| {
-            anyhow!("file {} contains frontmatter that not well formatted", name)
-        })?;
+        let hash = metadata
+            .into_hash()
+            .ok_or_else(|| anyhow!("file {} contains frontmatter that not well formatted", name))?;
         let string = |name: &str| -> Option<String> {
             hash.get(&Yaml::String(name.into()))
                 .and_then(|v| v.as_str().map(|s| s.into()))
@@ -117,9 +117,8 @@ impl Frontmatter {
             hash.get(&Yaml::String(name.into()))
                 .and_then(|v| v.as_bool())
         };
-        let title = string("title").ok_or_else(|| {
-            anyhow!("file {} contains frontmatter missing a string title", name)
-        })?;
+        let title = string("title")
+            .ok_or_else(|| anyhow!("file {} contains frontmatter missing a string title", name))?;
         let published = boolean("published");
         let tags = string("tags");
         let date = string("date");
