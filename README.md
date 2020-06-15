@@ -45,7 +45,8 @@ substitute a VERSION below with a valid release version
 
 ```sh
 $ cd $HOME/bin
-$ VERSION=v0.1.0 curl -L "https://github.com/softprops/devtogo/releases/download/${VERSION}/devtogo-$(uname -s)-$(uname -m).tar.gz" \
+$ export VERSION=v0.1.0
+$ curl -L "https://github.com/softprops/devtogo/releases/download/${VERSION}/devtogo-$(uname -s)-$(uname -m).tar.gz" \
   | tar -xz -C ~/bin
 ```
 
