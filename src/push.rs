@@ -296,7 +296,9 @@ pub async fn run(
         println!(
             "{}{}{}",
             meta.title.chars().take(50).collect::<String>().bold(),
-            String::from(".").repeat(50 - meta.title.len()).dimmed(),
+            String::from(".")
+                .repeat(50_usize.checked_sub(meta.title.len()).unwrap_or_default())
+                .dimmed(),
             format!("[{} {}]", status, meta.publish_status()).bold(),
         );
         if !dryrun {
