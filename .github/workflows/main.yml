@@ -111,6 +111,8 @@ jobs:
       run: |
         SHA256=$(shasum -a 256 ${{ matrix.name }} | awk '{printf $1}')
         VERSION=${GITHUB_REF#refs/tags/}
+        echo "SHA256 ${SHA256}"
+        echo "VERSION ${VERSION}"
         brew tap softprops/tools
         brew bump-formula-pr \
           -f \
