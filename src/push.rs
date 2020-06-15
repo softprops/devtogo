@@ -32,6 +32,7 @@ impl fmt::Display for UploadStatus<'_> {
     }
 }
 
+#[derive(PartialEq, Debug)]
 enum PublishStatus {
     Published,
     Draft,
@@ -316,6 +317,30 @@ pub async fn run(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn frontmatter_is_published_when_expected() {
+        assert_eq!(
+            Frontmatter::default().publish_status(),
+            PublishStatus::Draft
+        );
+        assert_eq!(
+            Frontmatter {
+                published: Some(false),
+                ..Frontmatter::default()
+            }
+            .publish_status(),
+            PublishStatus::Draft
+        );
+        assert_eq!(
+            Frontmatter {
+                published: Some(true),
+                ..Frontmatter::default()
+            }
+            .publish_status(),
+            PublishStatus::Published
+        );
+    }
     #[test]
     fn valid_path_isnt_dirs() {
         assert!(!valid_path(&PathBuf::from("/")))
