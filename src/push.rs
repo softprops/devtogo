@@ -9,13 +9,13 @@ use std::{fmt, fs, path::PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
 
-enum Status<'a> {
+enum UploadStatus<'a> {
     Uploaded,
     Syncing(&'a Article),
     Posting,
 }
 
-impl fmt::Display for Status<'_> {
+impl fmt::Display for UploadStatus<'_> {
     fn fmt(
         &self,
         f: &mut fmt::Formatter<'_>,
@@ -23,9 +23,31 @@ impl fmt::Display for Status<'_> {
         let s = format!(
             "{}",
             match self {
-                Status::Uploaded => "UPLOADED".green(),
-                Status::Posting => "POSTING".yellow(),
-                Status::Syncing(ref _remote) => "SYNCING".yellow(),
+                UploadStatus::Uploaded => "UPLOADED".green(),
+                UploadStatus::Posting => "POSTING".yellow(),
+                UploadStatus::Syncing(ref _remote) => "SYNCING".yellow(),
+            }
+        );
+        f.write_str(&s)
+    }
+}
+
+#[derive(PartialEq, Debug)]
+enum PublishStatus {
+    Published,
+    Draft,
+}
+
+impl fmt::Display for PublishStatus {
+    fn fmt(
+        &self,
+        f: &mut fmt::Formatter<'_>,
+    ) -> fmt::Result {
+        let s = format!(
+            "{}",
+            match self {
+                PublishStatus::Published => "published".dimmed(),
+                PublishStatus::Draft => "draft".dimmed(),
             }
         );
         f.write_str(&s)
@@ -101,6 +123,13 @@ struct Frontmatter {
 }
 
 impl Frontmatter {
+    fn publish_status(&self) -> PublishStatus {
+        if self.published.unwrap_or_default() {
+            PublishStatus::Published
+        } else {
+            PublishStatus::Draft
+        }
+    }
     /// extract and validate raw yaml frontmatter
     fn from_file(
         name: &str,
@@ -248,7 +277,7 @@ pub async fn run(
         let name = path.file_name().unwrap_or_default().to_string_lossy();
         let (meta, _) = extract(name.as_ref(), &content)?;
         let status = match articles.iter().find(|a| a.title == meta.title) {
-            None => Status::Posting,
+            None => UploadStatus::Posting,
             Some(remote) => {
                 let differ = {
                     hasher.update(content.as_bytes());
@@ -258,9 +287,9 @@ pub async fn run(
                     local != remote
                 };
                 if differ {
-                    Status::Syncing(remote)
+                    UploadStatus::Syncing(remote)
                 } else {
-                    Status::Uploaded
+                    UploadStatus::Uploaded
                 }
             }
         };
@@ -268,14 +297,16 @@ pub async fn run(
             "{}{}{}",
             meta.title.chars().take(50).collect::<String>().bold(),
             String::from(".").repeat(50 - meta.title.len()).dimmed(),
-            format!("[{}]", status).bold()
+            format!("[{} {}]", status, meta.publish_status()).bold(),
         );
         if !dryrun {
             match status {
-                Status::Syncing(remote) => {
+                UploadStatus::Syncing(remote) => {
                     put(remote.id, client.clone(), api_key.clone(), content.clone()).await?
                 }
-                Status::Posting => post(client.clone(), api_key.clone(), content.clone()).await?,
+                UploadStatus::Posting => {
+                    post(client.clone(), api_key.clone(), content.clone()).await?
+                }
                 _ => (),
             }
         }
@@ -286,6 +317,30 @@ pub async fn run(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn frontmatter_is_published_when_expected() {
+        assert_eq!(
+            Frontmatter::default().publish_status(),
+            PublishStatus::Draft
+        );
+        assert_eq!(
+            Frontmatter {
+                published: Some(false),
+                ..Frontmatter::default()
+            }
+            .publish_status(),
+            PublishStatus::Draft
+        );
+        assert_eq!(
+            Frontmatter {
+                published: Some(true),
+                ..Frontmatter::default()
+            }
+            .publish_status(),
+            PublishStatus::Published
+        );
+    }
     #[test]
     fn valid_path_isnt_dirs() {
         assert!(!valid_path(&PathBuf::from("/")))
@@ -307,9 +362,15 @@ mod tests {
     }
 
     #[test]
-    fn status_impl_display() {
+    fn upload_status_impl_display() {
         fn test(_: impl fmt::Display) {}
-        test(Status::Posting)
+        test(UploadStatus::Posting)
+    }
+
+    #[test]
+    fn publish_status_impl_display() {
+        fn test(_: impl fmt::Display) {}
+        test(PublishStatus::Draft)
     }
 
     #[test]
