@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-    a dev.to tool for the road
+    a <a href="https://dev.to/">dev.to</a> tool for the road
 </p>
 
 <div align="center">
