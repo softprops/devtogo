@@ -7,6 +7,7 @@ use sha2::{Digest, Sha256};
 use std::{fmt, fs, path::PathBuf};
 use structopt::StructOpt;
 use walkdir::WalkDir;
+use anyhow::{anyhow, bail};
 
 enum Status<'a> {
     Uploaded,
@@ -78,7 +79,7 @@ fn extract(
     let (front, back) = frontmatter::parse_and_find_content(&content)?;
     let metadata = front.ok_or_else(
         || {
-            anyhow::anyhow!(
+            anyhow!(
                 "file {} is missing required markdown frontmatter.\n  ▶ Please see https://dev.to/p/editor_guide more information on what frontmatter is expected", name
             )
         }
@@ -106,7 +107,7 @@ impl Frontmatter {
         metadata: Yaml,
     ) -> anyhow::Result<Frontmatter> {
         let hash = metadata.into_hash().ok_or_else(|| {
-            anyhow::anyhow!("file {} contains frontmatter that not well formatted", name)
+            anyhow!("file {} contains frontmatter that not well formatted", name)
         })?;
         let string = |name: &str| -> Option<String> {
             hash.get(&Yaml::String(name.into()))
@@ -117,14 +118,14 @@ impl Frontmatter {
                 .and_then(|v| v.as_bool())
         };
         let title = string("title").ok_or_else(|| {
-            anyhow::anyhow!("file {} contains frontmatter missing a string title", name)
+            anyhow!("file {} contains frontmatter missing a string title", name)
         })?;
         let published = boolean("published");
         let tags = string("tags");
         let date = string("date");
         if let Some(value) = &date {
             if DateTime::parse_from_rfc3339(&value).is_err() {
-                anyhow::bail!(
+                bail!(
                     "file {} contains frontmatter with and invalid date: {}",
                     name,
                     value
