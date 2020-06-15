@@ -41,9 +41,12 @@ $ cargo install devtogo
 
 ### Via GitHub Releases
 
+Using a version from the GitHub [Releases Page](https://github.com/softprops/devtogo/releases),
+substitute VERSION below
+
 ```sh
 $ cd $HOME/bin
-$ curl -L "https://github.com/softprops/devtogo/releases/download/v0.0.1/devtogo-$(uname -s)-$(uname -m).tar.gz" \
+$ VERSION=v0.1.0 curl -L "https://github.com/softprops/devtogo/releases/download/${VERSION}/devtogo-$(uname -s)-$(uname -m).tar.gz" \
   | tar -xz -C ~/bin
 ```
 
