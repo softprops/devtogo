@@ -24,22 +24,21 @@
 
 <br />
 
-## install
+## 📦 install
 
-
-### Via homebrew (osx)
+### 🔹 homebrew (osx)
 
 ```sh
 $ brew install softprops/tools/devtogo
 ```
 
-### Via cargo
+### 🔹 cargo
 
 ```sh
 $ cargo install devtogo
 ```
 
-### Via GitHub Releases
+### 🔹 GitHub Releases
 
 Using a version from the GitHub [Releases Page](https://github.com/softprops/devtogo/releases),
 substitute VERSION below
@@ -50,7 +49,7 @@ $ VERSION=v0.1.0 curl -L "https://github.com/softprops/devtogo/releases/download
   | tar -xz -C ~/bin
 ```
 
-## usage
+## 🤸‍♂️ usage
 
 devtogo is a cli primarily focused on publishing offline markdown files to [dev.to](https://dev.to/). These files follow the same formatting rules documented in [dev.to's editor guide](https://dev.to/p/editor_guide).
 
