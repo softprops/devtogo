@@ -24,7 +24,7 @@
 
 <br />
 
-devtogo is a cli for publishing offline markdown files to dev.to. 
+<img width="30px" src="https://cdn.svgporn.com/logos/markdown.svg"/> devtogo is a cli for publishing offline markdown files to dev.to. 
 
 ## 💾 install
 
