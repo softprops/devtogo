@@ -24,6 +24,8 @@
 
 <br />
 
+devtogo is a cli for publishing offline markdown files to dev.to. 
+
 ## 💾 install
 
 ### 🍻 [Homebrew](https://brew.sh/) (osx)
@@ -52,7 +54,7 @@ $ curl -L "https://github.com/softprops/devtogo/releases/download/${VERSION}/dev
 
 ## 🤸‍♂️ usage
 
-devtogo is a cli primarily focused on publishing offline markdown files to [dev.to](https://dev.to/). These files follow the same formatting rules documented in [dev.to's editor guide](https://dev.to/p/editor_guide).
+devtogo is a cli for publishing offline markdown files to [dev.to](https://dev.to/). These files follow the same formatting rules documented in [dev.to's editor guide](https://dev.to/p/editor_guide).
 
 At a bare minimum you'll want to declare a **`title`** in a [frontmatter section](https://jekyllrb.com/docs/front-matter/) of your markdown file.
 
