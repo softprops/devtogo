@@ -241,13 +241,20 @@ async fn fetch(
     client: &Client,
     api_key: &str,
 ) -> anyhow::Result<Vec<Article>> {
-    Ok(client
+    let resp = client
         .get("https://dev.to/api/articles/me/all?per_page=1000")
         .header("api-key", api_key)
         .send()
-        .await?
-        .json()
-        .await?)
+        .await?;
+
+    if !resp.status().is_success() {
+        bail!(
+            "Dev.to error {:#?} - bad or invalid API Key",
+            resp.status(),
+            );
+    } else {
+        Ok(resp.json().await?)
+    }
 }
 
 fn valid_path(path: &PathBuf) -> bool {
