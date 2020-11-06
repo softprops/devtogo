@@ -248,10 +248,7 @@ async fn fetch(
         .await?;
 
     if !resp.status().is_success() {
-        bail!(
-            "Dev.to error {:#?} - bad or invalid API Key",
-            resp.status(),
-            );
+        bail!("Dev.to error {:#?} - bad or invalid API Key", resp.status(),);
     } else {
         Ok(resp.json().await?)
     }
