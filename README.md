@@ -62,9 +62,9 @@ At a bare minimum you'll want to declare a **`title`** in a [frontmatter section
 ---
 title: my very first post
 ---
+
 # hello everybody
 ```
-
 
 To get started, you will first need to export an **`DEVTO_API_KEY`** environment variable. You can generate yours 👉[here](https://dev.to/settings/account)
 
@@ -78,13 +78,13 @@ The most basic usage is to run the program inside the directory containing your 
 $ devtogo
 ```
 
-This will scan the current working directory for articles: markdown documents containing frontmatter describing metadata about the article. devtogo uses the **`title`** frontmatter field as a unique identifier to compare existing remote content. 
+This will scan the current working directory for articles: markdown documents containing frontmatter describing metadata about the article. devtogo uses the **`title`** frontmatter field as a unique identifier to compare existing remote content.
 
-When it can't resolve an article by title it uploads it, assuming its a new article. When it can, it local and remote compares content and uploads local copy if the content of the local copy differs.
+When it can't resolve an article by title, it uploads it assuming it's a new article. When it can, it compares local and remote content and uploads local copy if the content of the local copy differs.
 
 > you can use the `published` frontmatter to indicate if and when an article should be published
-  by default articles are saved as drafts only you can see. Setting published to true will publish articles.
-  If you do this by accident you can set published back to false to unpublish an article if needed
+> by default articles are saved as drafts only you can see. Setting published to true will publish articles.
+> If you do this by accident you can set `published` back to false to revert a published an article if needed
 
 To be more explicit you can provide a source argument which provides a path where content
 is stored.

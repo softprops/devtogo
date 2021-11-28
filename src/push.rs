@@ -98,7 +98,13 @@ fn extract(
     name: &str,
     content: &str,
 ) -> anyhow::Result<(Frontmatter, String)> {
-    let (front, back) = frontmatter::parse_and_find_content(&content)?;
+    let (front, back) = match frontmatter::parse_and_find_content(&content) {
+        Ok((front, back)) => (front, back),
+        Err(err) => {
+            eprintln!("Error extracting front matter from {}", name);
+            Err(err)?
+        }
+    };
     let metadata = front.ok_or_else(
         || {
             anyhow!(

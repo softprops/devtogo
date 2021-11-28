@@ -6,6 +6,7 @@ use structopt::StructOpt;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    env_logger::init();
     let args = Push::from_args();
     push::run(
         env::var("DEVTO_API_KEY")
